@@ -31,43 +31,47 @@ function menu(){
 	read opcion_nmap
 }
 
-function archivo_existente(){
-
-	echo -e "Test"
-
-}
-
 function totalScan(){
 	echo -e "Has elegido el escaneo total"
 	echo -e "Dime la direccion IP>>"
 	read ip_direccion
 	echo -e "Deseas guardar el archivo en el directorio: (si/no)" && pwd 
 	read respuesta
-	if [ "$respuesta" == "si" ]; then
+	if [ $respuesta == "si" ]; then
 	sleep 1
 	echo -e "Como se llamará el archivo? "
 	read nombre_archivo
-	if [ -f $nombre_archivo ]; then
-		echo -e "El archivo ya existe! deseas sobreescribirlo? (si/no)"
-		read respuesta_archivo_existente
-		if [ "$respuesta_archivo_existente" == "si" ]; then 
-			echo -e "Creando escaneo TOTAL y guardando con el nombre: " $nombre_archivo
+		if [ -f $nombre_archivo ]; then
+			echo -e "El archivo ya existe! deseas sobreescribirlo? (si/no)"
+			read respuesta_archivo_existente
+			if [ "$respuesta_archivo_existente" == "si" ]; then 
+				echo -e "Creando escaneo TOTAL y guardando con el nombre: " $nombre_archivo
+				nmap -sC -sV -Pn $ip_direccion > $nombre_archivo
+				echo -e "Escaneo completado. Escaneo guardado en: $nombre_archivo"
+			fi
+			if [ "$respuesta_archivo_existente" == "no" ]; then
+				echo -e "Dime un nuevo nombre para el archivo: "
+				read nombre_archivo 
+
+			fi
+		else 
+			echo -e "Creando un nuevo archivo llamado: $nombre_archivo"
+			sleep 1 
+			echo -e "Ejecutando script..."
+			sleep 1
 			nmap -sC -sV -Pn $ip_direccion >> $nombre_archivo
-				if [ -f $nombre_archivo ]; then
-					echo -e "Escaneo completado"
-				else
-					echo -e "Escaneo no completado"
+			if [ -f $nombre_archivo ]; then
+				echo -e "Escaneo completado"
+			else
+				echo -e "Escaneo no completado"
 				exit 
-				fi 
-		elif [ "$respuesta_archivo_existente" == "no" ]; then
-			echo -e "Dime un nuevo nombre para el archivo: "
-			read nombre_archivo 
+			fi
+		fi 
 
-	elif [ "$respuesta" == "no" ]; then
+	if [ "$respuesta" == "no" ]; then
 		echo -e "Guardando en otro directorio."
-		exit 
-	fi 
-
+		exit 1
+		fi
 	fi 
 }
 
