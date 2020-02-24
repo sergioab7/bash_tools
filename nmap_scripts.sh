@@ -3,6 +3,10 @@
 #by xaxxjs
 #diferentes scripts para el escaneo de alguna máquina.
 
+
+
+#ESTA ES UNA PRUEBA
+
 #Colours
 greenColour="\e[0;32m\033[1m"
 endColour="\033[0m\e[0m"
