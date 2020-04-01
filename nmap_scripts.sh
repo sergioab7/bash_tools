@@ -2,8 +2,7 @@
 
 #by xaxxjs
 #diferentes scripts para el escaneo de alguna máquina.
-#test
-#testeo esto que es muy bonito
+
 
 #Colours
 greenColour="\e[0;32m\033[1m"
