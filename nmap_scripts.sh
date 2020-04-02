@@ -26,10 +26,7 @@ function menu(){
 	echo -e "6) Escaneo TCP "
 	echo -e "7) Escaneo de toda la red"
 	echo -e "8) Escaneo de scripts vulnerables"
-	echo -e "9) Escaneo de scripts SMB"
-	echo -e "10) Escaneo de scripts HTTP"
-	echo -e "11) Escaneo de <SELECCIONA PUERTOS>"
-	echo -e "12) Mostrar scripts nmap (por categoria)"
+	echo -e "9) Mostrar scripts nmap (por categoria)"
 	read opcion_nmap
 }
 
@@ -317,6 +314,87 @@ function TCPScan(){
 
 }
 
+function AllScan(){
+
+	clear
+		echo -e "${purpleColour} Escaneo de toda la red ${endColour}"
+		echo -e "IP>>"
+		read dire_IP
+		echo -e "Direccion IP establecida: $dire_IP"
+		echo -e "Deseas guardar el archivo en el directorio: (si/no)" && pwd
+		read respuesta 
+		if [ $respuesta == "si" ]; then
+		sleep 1
+		echo -e "Como se llamará el archivo? "
+		read nombre_archivo 
+			if [ -f $nombre_archivo ]; then 
+			echo -e "El archivo ya existe. Deseas sobreescribirlo? (si/no)" 
+			read respuesta_de_archivo
+				if [ "$respuesta_de_archivo" == "si" ]; then 
+					echo -e "Creando escaneo de toda la red y guardando con el nombre: $nombre_archivo"
+					nmap -p- -sC -sV -Pn $dire_IP > $nombre_archivo
+					echo -e "Escaneo completado y guardado en: $nombre_archivo"
+				fi 
+				if [ "$respuesta_de_archivo" == "no" ];then 
+					echo -e "Nuevo nombre para el archivo: "
+					echo -e "next"
+				fi
+			fi
+		fi
+		echo -e "Creando un nuevo archivo llamado: $nombre_archivo"
+		sleep 1
+		echo -e "Ejecutando script... "
+		sleep 1
+		nmap -sU $dire_IP > $nombre_archivo
+		if [ -f "$nombre_archivo" ]; then
+			echo -e "Escaneo no completado"
+		else
+			echo -e "Escaneo completado"
+			exit 	
+		fi 
+
+}
+
+function ScriptsVuln(){
+	clear
+		echo -e "${purpleColour} Scripts vulnerables ${endColour}"
+		echo -e "IP>>"
+		read dire_IP
+		echo -e "Direccion IP establecida: $dire_IP"
+		echo -e "Deseas guardar el archivo en el directorio: (si/no)" && pwd
+		read respuesta 
+		if [ $respuesta == "si" ]; then
+		sleep 1
+		echo -e "Como se llamará el archivo? "
+		read nombre_archivo 
+			if [ -f $nombre_archivo ]; then 
+			echo -e "El archivo ya existe. Deseas sobreescribirlo? (si/no)" 
+			read respuesta_de_archivo
+				if [ "$respuesta_de_archivo" == "si" ]; then 
+					echo -e "Creando escaneo de scripts vulnerables y guardando con el nombre: $nombre_archivo"
+					nmap -sC -sV -Pn $dire_IP > $nombre_archivo
+					echo -e "Escaneo completado y guardado en: $nombre_archivo"
+				fi 
+				if [ "$respuesta_de_archivo" == "no" ];then 
+					echo -e "Nuevo nombre para el archivo: "
+					echo -e "next"
+				fi
+			fi
+		fi
+		echo -e "Creando un nuevo archivo llamado: $nombre_archivo"
+		sleep 1
+		echo -e "Ejecutando script... "
+		sleep 1
+		nmap -sU $dire_IP > $nombre_archivo
+		if [ -f "$nombre_archivo" ]; then
+			echo -e "Escaneo no completado"
+		else
+			echo -e "Escaneo completado"
+			exit 	
+		fi 
+
+}
+
 if [ "$(id -u)" -eq "0" ]; then
 	clear
 	echo -e "${redColour}Aviso: Debes estar conectado con el usuario root para un correcto funcionamiento${endColour}"
@@ -349,7 +427,7 @@ if [ "$(id -u)" -eq "0" ]; then
 			8) ScriptsVuln
 			;;
 
-			12) ScriptsNmap
+			9) ScriptsNmap
 			;;
 
 			*) exit
